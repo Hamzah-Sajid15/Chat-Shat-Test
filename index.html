@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Shat</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Firebase Libries -->
+    <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-database.js"></script>
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyBTwtFjRsJsqwdGwo3_aQPfQefJ05u_XJo",
+            authDomain: "chat-shat-9080e.firebaseapp.com",
+            projectId: "chat-shat-9080e",
+            storageBucket: "chat-shat-9080e.appspot.com",
+            messagingSenderId: "347625939725",
+            appId: "1:347625939725:web:c43542a3468109bbaec644",
+            measurementId: "G-JV94Q3T0GJ"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+    </script>
+    <script>
+        var myName = "Asiyah";
+
+        function sendMessage() {
+            var message = document.getElementById('message_input').value;
+            firebase.database().ref("messages").push().set({
+                'sender': myName,
+                'message': message
+            });
+            return false;
+        }
+        firebase.database().ref("messages").on('child_added', function(snapshot){
+            var html = "";
+            html += '<li>';
+            html += snapshot.val().sender + ": " + snapshot.val().message;
+            html += '</li>';
+            document.getElementById('list_of_messages').innerHTML += html;
+          });
+    </script>
+    <!-- Message Form -->
+    <form onsubmit="return sendMessage();">
+        <input type="text" id="message_input">
+        <input type="submit">
+    </form>
+    <ul id="list_of_messages"></ul>
+</body>
+
+</html>
